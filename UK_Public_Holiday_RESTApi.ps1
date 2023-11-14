@@ -1,34 +1,4 @@
-# declaring variables
-$uri = [string](Read-Host "Enter the url")
-$area = (Read-Host "Enter the area")
-$year = [int](Read-Host "Enter the year")
-$startDateOfYear = Get-Date @startDateParameter
-$endDateOfYear = Get-Date @endDateParameter
-# wrapping parameters
-$urlParameter = @{
-    uri = $uri
-}
-$areaParameter = @{
-    area = $area
-}
-$yearParameter = @{
-    year = $year
-}
-$startDateParameter = @{
-    year  = $year
-    month = 1
-    day   = 1
-}
-$endDateParameter = @{
-    year  = $year
-    month = 12
-    day   = 31
-}
-$publicHolidayParameter = @{
-    uri  = $uri
-    area = $area
-    year = $year
-}
+. 'C:/Users\shardi/Desktop/VS Code/Scripting/Basic-Training-PowerShell/restAPI/variableFile.ps1'
 # function to invoke the API
 function Invoke-Api {
     param(
@@ -100,23 +70,4 @@ function Get-WeekendExcludingPublicHoliday {
     }
     $weekendCountExcludingPublicHoliday = $weekendCount - $holidayCount
     return $weekendCountExcludingPublicHoliday
-}
-# main script to get the deatils
-try {
-    $workingDays = Get-WorkingDays @yearParameter
-    $weekendCount = Get-Weekend @yearParameter
-    $weekendCountExcludingPublicHoliday = Get-WeekendExcludingPublicHoliday @yearParameter
-    $holidays = Get-PublicHoliday @publicHolidayParameter
-    $publicHolidays = $holidays.Count
-    $result = [PSCustomObject]@{
-        "Year"                              = $year
-        "Public holidays"                   = $publicHolidays
-        "Working Days"                      = $workingDays
-        "Weekends"                          = $weekendCount
-        "Weekends Excluding Public Holiday" = $weekendCountExcludingPublicHoliday
-    }
-    $result | Format-Table -AutoSize
-}
-catch {
-    Write-Host "An error occurred: Please enter the valid year "
 }
